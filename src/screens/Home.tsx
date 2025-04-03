@@ -26,23 +26,8 @@ const Home: React.FC = () => {
                 <input
                     type="text"
                     placeholder="Search Users..."
-                    className="p-1 border border-gray-100 rounded focus:ring-1 focus:ring-blue-200 border-[1px] width-auto"
-                    onChange={(e) => {
-                        const searchTerm = e.target.value.toLowerCase();
-                        const userCards = document.querySelectorAll(".bg-white.shadow-md.rounded-lg.p-4");
-                        userCards.forEach((card) => {
-                            const nameElement = card.querySelector("h3.text-lg.font-semibold.text-gray-800");
-                            if (nameElement) {
-                                const name = nameElement.textContent?.toLowerCase() || "";
-                                if (name.includes(searchTerm)) {
-                                    (card as HTMLElement).style.display = "block";
-                                } else {
-                                    (card as HTMLElement).style.display = "none";
-                                }
-                            }
-                        });
-                    }}
-                />
+                    className=" p-1 border border-gray-100 rounded focus:ring-1 focus:ring-blue-200 border-[1px] width-auto"
+                     />
             </div>
             <main className="container mx-auto">
             <div className="bg-white shadow-md rounded-lg p-6">

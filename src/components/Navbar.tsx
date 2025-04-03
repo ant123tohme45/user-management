@@ -31,10 +31,40 @@ const Navbar: React.FC = () => {
                         </a>
                     </li>
                     <li>
-                        <a href="#" className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+                        <a
+                            href="#"
+                            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                            onClick={() => {
+                                alert("You have been logged out.");
+                                localStorage.clear();
+                                sessionStorage.clear();
+                                alert("You have been logged out and all data has been cleared.");
+                                window.close();
+                            }}
+                        >
                             Log-out
                         </a>
                     </li>
+                    <li>
+                        <button
+                            className="bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700"
+                            onClick={() => {
+                                document.documentElement.classList.toggle("dark");
+                                const isDarkMode = document.documentElement.classList.contains("dark");
+                                const themeIcon = isDarkMode ? "🌙" : "☀️";
+                                alert(`Theme changed to ${isDarkMode ? "dark" : "light"} ${themeIcon}`);
+                                localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+                                alert(`Theme changed to ${isDarkMode ? "dark" : "light"}`);
+                                const themeButton = document.querySelector("button");
+                                if (themeButton) {
+                                    themeButton.textContent = themeIcon;
+                                }
+                            }}
+                        >
+                            ☀️/🌙
+                        </button>
+                    </li>
+                   
                     
                 </ul>
             </div>
