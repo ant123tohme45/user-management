@@ -23,6 +23,29 @@ const Home: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-800">User Management Dashboard</h1>
             </header>
             <div className="mb-4">
+                <div className="flex space-x-4 mb-2">
+                    <input
+                        id="ageFilter"
+                        type="number"
+                        placeholder="Filter by Age"
+                        className="p-1 border border-gray-100 rounded focus:ring-1 focus:ring-blue-200"
+                    />
+                    <label htmlFor="statusFilter" className="sr-only">Filter by Status</label>
+                    <select
+                        id="statusFilter"
+                        className="p-1 border border-gray-100 rounded focus:ring-1 focus:ring-blue-200"
+                    >
+                        <option value="">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    <button
+                        id="filterButton"
+                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                    >
+                        Reset Filters
+                    </button>
+                </div>
                 <input
                     type="text"
                     placeholder="Search Users..."
