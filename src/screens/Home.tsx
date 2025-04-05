@@ -26,8 +26,49 @@ const Home: React.FC = () => {
                 <input
                     type="text"
                     placeholder="Search Users..."
-                    className=" p-1 border border-gray-100 rounded focus:ring-1 focus:ring-blue-200 border-[1px] width-auto"
-                     />
+                    className="p-1 border border-gray-100 rounded focus:ring-1 focus:ring-blue-200 border-[1px] width-auto"
+                    onChange={(e) => {
+                        const searchTerm = e.target.value.toLowerCase();
+                        const userCards = document.querySelectorAll(".bg-white.shadow-md.rounded-lg.p-4");
+                        userCards.forEach((card) => {
+                            const nameElement = card.querySelector("h3.text-lg.font-semibold.text-gray-800");
+                            const statusElement = card.querySelector("p.text-gray-600:nth-of-type(3)");
+                            const birthDateElement = card.querySelector("p.text-gray-600:nth-of-type(2)");
+
+                            const name = nameElement?.textContent?.toLowerCase() || "";
+                            const status = statusElement?.textContent?.toLowerCase() || "";
+                            const birthDate = birthDateElement?.textContent?.split(":")[1]?.trim() || "";
+
+                            const ageFilter = document.getElementById("ageFilter") as HTMLInputElement;
+                            const statusFilter = document.getElementById("statusFilter") as HTMLSelectElement;
+
+                            const age = ageFilter?.value ? parseInt(ageFilter.value) : null;
+                            const statusFilterValue = statusFilter?.value.toLowerCase() || "";
+
+                            const currentYear = new Date().getFullYear();
+                            const birthYear = birthDate ? parseInt(birthDate.split("-")[0]) : null;
+                            const calculatedAge = birthYear ? currentYear - birthYear : null;
+
+                            const matchesName = name.includes(searchTerm);
+                            const matchesStatus = !statusFilterValue || status.includes(statusFilterValue);
+                            const matchesAge = !age || (calculatedAge && calculatedAge === age);
+
+                            if (matchesName && matchesStatus && matchesAge) {
+                                card.classList.remove("hidden");
+                            } else {
+                                card.classList.add("hidden");
+                            }
+                        });
+
+                        const filterButton = document.getElementById("filterButton") as HTMLButtonElement;
+                        filterButton?.addEventListener("click", () => {
+                            const userCards = document.querySelectorAll(".bg-white.shadow-md.rounded-lg.p-4");
+                            userCards.forEach((card) => {
+                                card.classList.remove("hidden");
+                            });
+                        });
+                    }}
+                />
             </div>
             <main className="container mx-auto">
                
