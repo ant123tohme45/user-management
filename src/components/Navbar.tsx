@@ -5,7 +5,7 @@ const Navbar: React.FC = () => {
     // Removed unused handleCreateUser function
 
     return (
-        <nav className="bg-blue-500 text-white shadow-md">
+        <nav className="bg-[#3251D0] text-white shadow-md">
             <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <div className="text-lg font-bold">MyApp</div>
             <ul className="flex space-x-6">
@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
                 <li>
                 <a
                     href="#"
-                    className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-blue-100 transition-transform transform hover:scale-105"
+                    className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-[#3251D0] transition-transform transform hover:scale-105"
                    
                     onClick={() => {
                     const firstName = prompt("Enter First Name:");
