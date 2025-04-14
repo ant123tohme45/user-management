@@ -2,7 +2,7 @@
 module.exports = {
     darkMode: 'class',  // Use class-based dark mode
     content: [
-      './src/**/*.{html,js,jsx,ts,tsx}',  // Adjust this path if needed
+      "./src/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
       extend: {
@@ -13,4 +13,3 @@ module.exports = {
     },
     plugins: [],
   };
-  
