@@ -15,7 +15,8 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       expiresIn: null,
       isAuthenticated: false, // Add the new property here
-      // In your authStore.ts
+     
+    
 login: (token: string, expiresIn: number) => {
   set({ accessToken: token, expiresIn });
 },

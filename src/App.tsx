@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './log/Login';
 import Home from './screens/Home';
-import Layout from './Layout'; 
+import './App.css'; // Import your global CSS file
 
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         {/* Protected layout with Navbar */}
-        <Route element={<Layout />}>
+        <Route element={<Home />}>
           <Route path="/home" element={<Home />} />
         </Route>
 

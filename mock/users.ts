@@ -1,34 +1,34 @@
 import { MockMethod } from 'vite-plugin-mock';
 
-import { ApiHeaders } from './mock.type';
-import { generateResponse, getUnAuthorizedResponse, validateToken } from './mock.util';
-import usersData from './users.json';
+const mockUsers = [
+  {
+    id: '1',
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+    status: 'active',
+    dob: '1990-05-15'
+  },
+  // Add more users from your assignment
+];
 
-const mock: MockMethod[] = [
+export default [
   {
     url: '/api/users',
     method: 'get',
-    timeout: 2000,
-    response: ({ query, headers }: { query: { search?: string }; headers: ApiHeaders }) => {
-      if (validateToken(headers.authorization)) {
-        let users = [...usersData.users];
-
-        const { search } = query;
-        const lowerCaseSearch = search?.toLowerCase() || '';
-
-        if (lowerCaseSearch) {
-          users = usersData.users.filter(
-            (user) =>
-              user.firstName.toLowerCase().includes(lowerCaseSearch) ||
-              (user.lastName && user.lastName.toLowerCase().includes(lowerCaseSearch)) ||
-              user.email.toLowerCase().includes(lowerCaseSearch),
-          );
-        }
-        return generateResponse({ users });
+    response: ({ query }) => {
+      if (query.search) {
+        const search = query.search.toLowerCase();
+        return {
+          code: 200,
+          data: mockUsers.filter(u => 
+            u.firstName.toLowerCase().includes(search) ||
+            u.lastName.toLowerCase().includes(search) ||
+            u.email.toLowerCase().includes(search)
+          ),
+        };
       }
-      return getUnAuthorizedResponse();
+      return { code: 200, data: mockUsers };
     },
   },
-];
-
-export default mock;
+] as MockMethod[];
