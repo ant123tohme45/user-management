@@ -1,15 +1,14 @@
-// tailwind.config.js
-module.exports  = {
-    darkMode: 'class',  // Use class-based dark mode
-    content: [
-      "./src/**/*.{js,jsx,ts,tsx}",
-    ],
-    theme: {
-      extend: {
-        colors: {
-          primary: '#3251D0', // Custom primary color (example)
-        },
+export default {
+  darkMode: "class", // Enable dark mode using a class
+  content: ["./index.html", "./src/**/*.{js, ts, jsx,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        primary: "#3251d0",
+        "primary-dark": "#2740a6",
+        "primary-super-dark": "#1f1f1f",
       },
     },
-    plugins: [],
-  };
+  },
+  plugins: [],
+};
