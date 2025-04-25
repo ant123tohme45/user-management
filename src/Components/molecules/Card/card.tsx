@@ -1,5 +1,6 @@
 import { Initial } from "../../atoms/initial/Initial";
-import { CardProps } from "./Card.types";
+import { CardProps } from "./Card-types";
+
 
 export const Card = ({
   initial,
@@ -22,3 +23,4 @@ export const Card = ({
     </div>
   );
 };
+export default Card;

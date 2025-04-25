@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuthStore } from '../stores/authStores';
+import { useAuthStore } from '../store/authStore';
 
 interface User {
   id: number;
