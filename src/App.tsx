@@ -1,51 +1,48 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
 import Login from "./Components/pages/Login";
 import PrivateRoute from "./Components/pages/PrivateRoute";
-import Home from "./screens/Home";
 import Dashboard from "./Components/pages/Dashboard";
 import PageNotFound from "./Components/pages/PageNotFound";
+import { useRef, useEffect } from "react";
 import { useThemeStore } from "./store/themeStore";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
-const queryClient = new QueryClient();
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AddUser from "./Components/pages/AddUser";
+import EditUser from "./Components/pages/EditUser";
 
 function App() {
-  const { theme, toggleTheme } = useThemeStore();
+  const theme = useThemeStore((state) => state.theme);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Apply theme on page load based on the local storage value
+    if (rootRef.current) {
+      if (theme === "dark") {
+        rootRef.current.classList.add("dark");
+      } else {
+        rootRef.current.classList.remove("dark");
+      }
+    }
+  }, [theme]);
+
+  const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className={`min-h-screen ${theme === 'dark' ? 'dark bg-primary-dark' : 'bg-primary-light'}`}>
-        {/* Theme Toggle Button */}
-        <button
-          onClick={toggleTheme}
-          className="fixed top-4 right-4 z-50 p-2 bg-gray-200 dark:bg-gray-700 rounded-full"
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-
+    <div className="dark:bg-primary-dark">
+      <QueryClientProvider client={queryClient}>
         <Router>
           <Routes>
-            {/* Redirect root to /login */}
             <Route path="/" element={<Navigate to="/login" replace />} />
-            
-            {/* Public Routes */}
             <Route path="/login" element={<Login />} />
-            
-            {/* Protected Routes */}
             <Route element={<PrivateRoute />}>
-              <Route path="/home" element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard/new" element={<AddUser />} />
+              <Route path="/dashboard/edit/:id" element={<EditUser />} />
             </Route>
-            
-            {/* 404 Page */}
-            <Route path="*" element={<PageNotFound />} />
+            <Route path="/*" element={<PageNotFound />} />
           </Routes>
         </Router>
-
-        <ReactQueryDevtools initialIsOpen={false} />
-      </div>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </div>
   );
 }
 

@@ -137,3 +137,50 @@
 .error-msg {
   @apply text-red-500 px-4 py-2 text-center dark:bg-primary-dark;
 }
+
+/* {Create User Form} */
+.outter-form {
+  @apply min-h-[calc(100vh-64px)] flex items-center justify-center px-4 py-2 bg-gray-100 dark:bg-primary-dark;
+}
+.main-form {
+  @apply w-full max-w-lg bg-white dark:bg-primary-super-dark shadow-md rounded-xl p-8 space-y-6;
+}
+.form-header {
+  @apply text-2xl font-semibold text-center text-gray-800 dark:text-white;
+}
+.input-header {
+  @apply block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300;
+}
+.submit-btn {
+  @apply w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition;
+}
+.form-input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600;
+}
+
+/* {Edit page} */
+
+.loading-page {
+  @apply min-h-screen dark:bg-primary-dark flex items-center justify-center;
+}
+
+/* {Confirmation modal} */
+
+.confirmation-modal {
+  @apply fixed inset-0  backdrop-blur-lg flex justify-center items-center z-50;
+}
+.inner-confirmation {
+  @apply bg-white dark:bg-primary-dark text-black dark:text-white p-6 rounded-lg shadow-xl w-full max-w-md;
+}
+.modal-header {
+  @apply text-lg font-medium;
+}
+.confirmation-btns {
+  @apply mt-6 flex justify-end gap-4;
+}
+.modal-cancel-btn {
+  @apply px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 dark:bg-primary-super-dark dark:hover:bg-primary-dark;
+}
+.modal-delete-btn {
+  @apply px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700;
+}

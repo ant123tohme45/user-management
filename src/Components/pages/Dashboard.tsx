@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../../store/authStore";
 import { Card } from "../molecules/Card/card";
 import SearchInput from "../molecules/SearchInput/SearchInput";
 import CardsContainer from "../organisms/CardsContainer/CardsContainer";
 import NavBar from "../organisms/NavBar/NavBar";
 import Loading from "../organisms/Loading/Loading";
+import { useLocation, useNavigate } from "react-router";
 
 type User = {
   id: string;
@@ -14,18 +16,40 @@ type User = {
   dateOfBirth: string;
   status: string;
 };
-const Dashboard = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const accessToken = useAuthStore((state) => state.accessToken);
+const useDebounce = (value: string, delay: number) => {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(timeout);
+  }, [value, delay]);
+  return debounced;
+};
 
-  const fetchUsers = async (query = "") => {
-    try {
-      setLoading(true);
-      setError(""); // Clear previous error
-      const url = query
-        ? `/api/users?search=${encodeURIComponent(query)}`
+const Dashboard = () => {
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 400);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const query = searchParams.get("q");
+    if (query) {
+      setSearchQuery(query);
+    }
+  }, [location.search]);
+
+  const {
+    data: users = [],
+    isLoading: loading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["users", debouncedSearch, accessToken],
+    queryFn: async () => {
+      const url = debouncedSearch
+        ? `/api/users?search=${encodeURIComponent(debouncedSearch)}`
         : "/api/users";
 
       const response = await fetch(url, {
@@ -36,50 +60,48 @@ const Dashboard = () => {
         },
       });
 
+      const data = await response.json();
+      console.log("📦 Raw user API response:", data); // ✅ Add this log
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.message || "Failed to fetch users");
       }
 
-      const data = await response.json();
-      setUsers(data.result.data.users); // Set users data
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError(err.message || "An unknown error occurred");
-      setUsers([]); // Clear users in case of error
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (accessToken) {
-      fetchUsers();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
+      return data.result.data.users;
+    },
+    enabled: !!accessToken,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const handleSearch = (query: string) => {
-    if (accessToken) {
-      fetchUsers(query);
+    setSearchQuery(query);
+    if (query.trim() === "") {
+      navigate("/dashboard", { replace: true });
+    } else {
+      navigate(`/dashboard?q=${encodeURIComponent(query)}`, { replace: true });
     }
   };
+
   return (
     <div className="min-h-screen dark:bg-primary-dark">
       <NavBar />
       <SearchInput onSearch={handleSearch} />
+
       {loading && <Loading />}
-      {!loading && users.length === 0 && !error && (
+
+      {!loading && isError && (
+        <p className="error-msg">{(error as Error).message}</p>
+      )}
+
+      {!loading && !isError && users.length === 0 && (
         <p className="user-nf">User Not Found</p>
       )}
 
-      {error && <p className="error-msg">{error}</p>}
-
-      {!loading && !error && users.length > 0 && (
+      {!loading && !isError && users.length > 0 && (
         <CardsContainer>
-          {users.map((user) => (
+          {users.map((user: User) => (
             <Card
               key={user.id}
+              id={user.id}
               email={user.email}
               name={`${user.firstName} ${
                 user.lastName ? " " + user.lastName : ""
@@ -96,4 +118,5 @@ const Dashboard = () => {
     </div>
   );
 };
+
 export default Dashboard;

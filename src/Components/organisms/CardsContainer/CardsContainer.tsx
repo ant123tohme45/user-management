@@ -1,4 +1,4 @@
-import { CardsContainerProps } from "./CardsContainertypes";
+import { CardsContainerProps } from "./CardsContainer.types";
 
 const CardContainer = ({ children }: CardsContainerProps) => {
   return <div className="card-sec">{children}</div>;
